@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valentine's Day Special</title>
+
+    <link
+      rel="icon"
+      href="https://cdn-icons-png.flaticon.com/512/833/833472.png"
+      type="image/png"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      body {
+        -webkit-touch-callout: none;
+        margin: 0;
+        height: 110vh;
+        background: radial-gradient(circle at top, #fff0f3, #ffb3c1);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .three-d-wrapper {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        width: 100%;
+      }
+
+      .main-image {
+        width: 260px;
+        filter: drop-shadow(0 15px 25px rgba(255, 75, 110, 0.4));
+        animation: float3D 4s ease-in-out infinite;
+      }
+
+      @keyframes float3D {
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          transform: translateY(-20px) scale(1.05);
+        }
+      }
+
+      .hearts span {
+        position: absolute;
+        bottom: -10%;
+        animation: floatUp linear infinite;
+        color: rgba(255, 75, 110, 0.25);
+        z-index: 2;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(-120vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .btn-custom {
+        border: none;
+        color: white;
+        font-weight: 600;
+        transition: 0.3s;
+        box-shadow: 0 4px 15px rgba(255, 75, 110, 0.3);
+      }
+
+      #yesButton {
+        background: linear-gradient(45deg, #ff4d6d, #ff758f);
+        border: 1px solid #fff;
+      }
+
+      #yesButton:hover {
+        transform: scale(1.1);
+      }
+
+      #noButton {
+        background: linear-gradient(45deg, #ff758f, #ff4d6d);
+        border: 1px solid #fff;
+        z-index: 999;
+      }
+
+      .glass-text {
+        color: #590d22;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+      }
+
+      #yesSection {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: #590d22;
+        z-index: 5;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+      }
+
+      .yes-image {
+        width: 280px;
+        animation: heartbeat 1.2s infinite;
+      }
+
+      @keyframes heartbeat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      #confettiContainer {
+        position: fixed;
+        inset: 0;
+        z-index: 11; /* behind image */
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .three-d-wrapper {
+        position: relative;
+        z-index: 9; /* image stays above */
+      }
+
+      .heart {
+        position: absolute;
+        font-weight: bold;
+        opacity: 1;
+        animation: blast 3s linear forwards;
+      }
+
+      @keyframes blast {
+        0% {
+          transform: translate(0, 0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(var(--xDir), var(--yDir)) scale(0.8);
+          opacity: 0;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .display-3 {
+          font-size: 2rem;
+        }
+        .lead {
+          font-size: 1rem;
+        }
+        .main-image {
+          width: 180px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Countdown -->
+    <div
+      class="position-fixed top-0 start-50 mt-5 translate-middle-x w-100 text-center py-2"
+      style="z-index: 3000; pointer-events: none"
+    >
+      <div
+        class="d-inline-block px-4 py-2 rounded-pill shadow-sm"
+        style="
+          background: rgba(255, 255, 255, 0.65);
+          backdrop-filter: blur(6px);
+        "
+      >
+        ❤️ Valentine’s Day in <span id="timer">00:00:00:00</span>
+      </div>
+    </div>
+
+    <div class="hearts" id="hearts"></div>
+    <div id="confettiContainer"></div>
+
+    <div class="container three-d-wrapper" id="mainDiv">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/3208/3208707.png"
+        class="main-image mb-4"
+      />
+
+      <div class="glass-text">
+        <h1 class="display-3 fw-bold mb-3">Will you be Valentine?</h1>
+        <p class="lead mb-5">Think carefully before you choose!</p>
+
+        <div class="d-flex justify-content-center gap-4">
+          <button
+            class="btn btn-custom btn-lg rounded-pill px-4 py-3"
+            id="yesButton"
+            onclick="showYes()"
+          >
+            Yes, I will!
+          </button>
+
+          <button
+            class="btn btn-custom btn-lg rounded-pill px-4 py-3"
+            id="noButton"
+            onmouseover="moveButton()"
+            ontouchstart="moveButton()"
+          >
+            No thanks
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="yesSection">
+      <img
+        src="/love-birds.png"
+        class="yes-image mb-4"
+      />
+      <h1 class="display-1 fw-bold">YAY! ❤️</h1>
+      <p class="lead">I'm the happiest person alive!</p>
+    </div>
+
+    <script>
+      // Floating background hearts
+      const hearts = document.getElementById("hearts");
+      for (let i = 0; i < 35; i++) {
+        const h = document.createElement("span");
+        h.innerHTML = "❤";
+        h.style.left = Math.random() * 100 + "%";
+        h.style.fontSize = Math.random() * 20 + 12 + "px";
+        h.style.animationDuration = Math.random() * 5 + 5 + "s";
+        hearts.appendChild(h);
+      }
+
+      // Countdown
+      const timer = document.getElementById("timer");
+      function countdown() {
+        const now = new Date();
+        let year = now.getFullYear();
+        let vDay = new Date(year, 1, 14);
+        if (now > vDay) vDay = new Date(year + 1, 1, 14);
+
+        const diff = vDay - now;
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor(diff / 3600000) % 24;
+        const m = Math.floor(diff / 60000) % 60;
+        const s = Math.floor(diff / 1000) % 60;
+
+        timer.textContent =
+          String(d).padStart(2, "0") +
+          ":" +
+          String(h).padStart(2, "0") +
+          ":" +
+          String(m).padStart(2, "0") +
+          ":" +
+          String(s).padStart(2, "0");
+      }
+      countdown();
+      setInterval(countdown, 1000);
+
+      const confettiContainer = document.getElementById("confettiContainer");
+      const colors = ["#ff4d6d", "#ffffff"];
+
+      function launchConfetti() {
+        setInterval(() => {
+          for (let i = 0; i < 5; i++) {
+            const heart = document.createElement("div");
+
+            const size = Math.random() * 12 + 10; // 10–22px
+
+            heart.className = "heart";
+            heart.textContent = "♥";
+            heart.style.fontSize = size + "px";
+            heart.style.color =
+              colors[Math.floor(Math.random() * colors.length)];
+
+            heart.style.top = Math.random() * window.innerHeight + "px";
+            heart.style.left = Math.random() * window.innerWidth + "px";
+
+            heart.style.setProperty("--xDir", Math.random() * 200 - 100 + "px");
+            heart.style.setProperty("--yDir", Math.random() * 200 - 100 + "px");
+
+            confettiContainer.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 3000);
+          }
+        }, 250);
+      }
+
+      function showYes() {
+        mainDiv.style.display = "none";
+        yesSection.style.display = "flex";
+        document.body.style.background = "#590d22";
+        launchConfetti();
+      }
+
+      function moveButton() {
+        const btn = document.getElementById("noButton");
+        btn.style.position = "fixed";
+        btn.style.left =
+          Math.random() * (window.innerWidth - btn.offsetWidth) + "px";
+        btn.style.top =
+          Math.random() * (window.innerHeight - btn.offsetHeight) + "px";
+      }
+
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
+      document.addEventListener("dragstart", (e) => e.preventDefault());
+    </script>
+
+    <script>
+      document.addEventListener("keydown", function (e) {
+        if (
+          e.key === "F12" ||
+          (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key)) ||
+          (e.ctrlKey && e.key === "U")
+        ) {
+          e.preventDefault();
+          return false;
+        }
+      });
+    </script>
+
+    <script>
+      (function () {
+        function blockDebugger() {
+          debugger;
+          setTimeout(blockDebugger, 100);
+        }
+        blockDebugger();
+      })();
+    </script>
+  </body>
+</html>
